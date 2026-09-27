@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LocalDrop — Local clipboard &amp; file sync</title>
+<meta name="description" content="LocalDrop syncs your clipboard and files between your own devices on the local network. No cloud, no accounts.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><text y=%2220%22 font-size=%2220%22>🔗</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="app-shell">
+
+  <!-- ============ Desktop sidebar ============ -->
+  <nav class="sidebar" aria-label="Main navigation">
+    <div class="sidebar-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="22" height="22"><path d="M10 6a5 5 0 0 1 5 5v3h-3v-3a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v3H8a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5h2Zm12 20a5 5 0 0 1-5-5v-3h3v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2v-3h2a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-2Z" fill="currentColor"/></svg>
+      </span>
+      <span class="brand-name">LocalDrop</span>
+    </div>
+    <ul class="sidebar-nav" role="list">
+      <li><button class="nav-item" data-nav="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/></svg><span>Home</span></button></li>
+      <li><button class="nav-item" data-nav="clipboard"><svg class="i" viewBox="0 0 24 24"><path d="M9 3h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1V4a1 1 0 0 1 1-1Zm0 2v2h6V5H9Z" fill="currentColor"/></svg><span>Clipboard</span></button></li>
+      <li><button class="nav-item" data-nav="devices"><svg class="i" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm5 16.2a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2ZM7 4v13h10V4H7Z" fill="currentColor"/></svg><span>Devices</span><span class="nav-badge" id="devices-nav-badge" hidden>0</span></button></li>
+      <li><button class="nav-item" data-nav="history"><svg class="i" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 1-8.94 10H5.1A7 7 0 1 0 12 5v4L7 5.5 12 2v1Z" fill="currentColor"/></svg><span>History</span></button></li>
+      <li><button class="nav-item" data-nav="files"><svg class="i" viewBox="0 0 24 24"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5Z" fill="currentColor"/></svg><span>Files</span></button></li>
+      <li><button class="nav-item" data-nav="settings"><svg class="i" viewBox="0 0 24 24"><path d="M12 8.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5Zm8.4 2.1-1.8-.3a6.8 6.8 0 0 0-.6-1.5l1.1-1.5a1 1 0 0 0-.1-1.3l-1-1a1 1 0 0 0-1.3-.1l-1.5 1.1a6.8 6.8 0 0 0-1.5-.6l-.3-1.8A1 1 0 0 0 12.4 3h-1.4a1 1 0 0 0-1 .8l-.3 1.8a6.8 6.8 0 0 0-1.5.6L6.7 5.1a1 1 0 0 0-1.3.1l-1 1a1 1 0 0 0-.1 1.3l1.1 1.5a6.8 6.8 0 0 0-.6 1.5l-1.8.3a1 1 0 0 0-.8 1v1.4a1 1 0 0 0 .8 1l1.8.3c.14.53.35 1.03.6 1.5l-1.1 1.5a1 1 0 0 0 .1 1.3l1 1a1 1 0 0 0 1.3.1l1.5-1.1c.47.25.97.46 1.5.6l.3 1.8a1 1 0 0 0 1 .8h1.4a1 1 0 0 0 1-.8l.3-1.8c.53-.14 1.03-.35 1.5-.6l1.5 1.1a1 1 0 0 0 1.3-.1l1-1a1 1 0 0 0 .1-1.3l-1.1-1.5c.25-.47.46-.97.6-1.5l1.8-.3a1 1 0 0 0 .8-1v-1.4a1 1 0 0 0-.8-1Z" fill="currentColor"/></svg><span>Settings</span></button></li>
+    </ul>
+    <button class="sidebar-help" data-nav="help">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm.9 15.5h-1.8v-1.8h1.8Zm1.86-6.9-.8.83c-.65.66-1 1.17-1 2.57h-1.8v-.45c0-1 .35-1.94 1-2.6l1.1-1.13a1.6 1.6 0 0 0 .49-1.17 1.66 1.66 0 1 0-3.32 0h-1.8a3.46 3.46 0 1 1 6.93 0 3.1 3.1 0 0 1-.7 1.95Z" fill="currentColor"/></svg>
+      <span>Help</span>
+    </button>
+  </nav>
+
+  <!-- ============ Top bar ============ -->
+  <header class="topbar">
+    <div class="topbar-left mobile-only">
+      <span class="brand-mark small" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="18" height="18"><path d="M10 6a5 5 0 0 1 5 5v3h-3v-3a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v3H8a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5h2Zm12 20a5 5 0 0 1-5-5v-3h3v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2v-3h2a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-2Z" fill="currentColor"/></svg>
+      </span>
+      <span class="brand-name">LocalDrop</span>
+    </div>
+    <h1 class="topbar-title desktop-only" id="view-title">Home</h1>
+    <div class="status-pill" id="status-pill" role="status" aria-live="polite">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">Waiting for devices</span>
+    </div>
+  </header>
+
+  <!-- ============ Main content ============ -->
+  <main id="main">
+
+    <!-- ---------- HOME ---------- -->
+    <section class="view" data-view="home">
+      <div class="card hero-card">
+        <div class="hero-row">
+          <div>
+            <h2>Clipboard Sync</h2>
+            <p class="muted">Your clipboard is synced across connected devices.</p>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="btn-sync-clipboard">
+            <svg class="i" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 7.75 6h-2.08A6 6 0 1 1 12 6a5.9 5.9 0 0 1 4.2 1.75L13 11h7V4l-2.35 2.35A8 8 0 0 0 12 4Z" fill="currentColor"/></svg>
+            Sync Clipboard
+          </button>
+          <button class="btn btn-secondary" id="btn-paste-sync">Paste &amp; Sync</button>
+          <button class="btn btn-ghost" id="btn-copy-latest">Copy Latest</button>
+          <button class="btn btn-ghost btn-danger-ghost" id="btn-clear-latest">Clear</button>
+        </div>
+        <p class="hint" id="clipboard-permission-hint" hidden></p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Latest Clipboard</h3>
+        </div>
+        <div id="latest-clipboard-slot">
+          <div class="empty-state">
+            <p class="empty-title">Nothing synced yet</p>
+            <p class="muted">Tap <strong>Sync Clipboard</strong> or <strong>Paste &amp; Sync</strong> to share your first snippet.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Connected Devices</h3>
+          <button class="link-btn" data-nav="devices">View all</button>
+        </div>
+        <ul class="device-list-compact" id="home-device-list"></ul>
+        <button class="btn btn-outline full-width" id="btn-connect-device-home">+ Connect Device</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Recent</h3>
+          <button class="link-btn" data-nav="history">See history</button>
+        </div>
+        <ul class="recent-list" id="home-recent-list"></ul>
+      </div>
+    </section>
+
+    <!-- ---------- CLIPBOARD / QUICK SEND ---------- -->
+    <section class="view" data-view="clipboard">
+      <div class="card">
+        <div class="card-header"><h3>Quick Send</h3></div>
+        <textarea id="quick-send-text" class="quick-send-area mono" placeholder="Type or paste text..." aria-label="Text to send"></textarea>
+        <div class="quick-send-meta" id="quick-send-meta"></div>
+        <div class="send-target-group" id="quick-send-targets" role="group" aria-label="Send to">
+          <label class="target-chip"><input type="checkbox" value="all" checked> All connected devices</label>
+        </div>
+        <button class="btn btn-primary full-width" id="btn-quick-send">Send</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Edit Before Syncing</h3></div>
+        <p class="muted">Open any clipboard entry from History to edit it in a full editor before syncing again.</p>
+        <button class="btn btn-outline" data-nav="history">Go to History</button>
+      </div>
+    </section>
+
+    <!-- ---------- DEVICES ---------- -->
+    <section class="view" data-view="devices">
+      <div class="card">
+        <div class="card-header">
+          <h3>Connected Devices</h3>
+          <button class="btn btn-primary btn-sm" id="btn-connect-device">+ Connect Device</button>
+        </div>
+        <ul class="device-list" id="devices-list"></ul>
+        <div class="empty-state" id="devices-empty" hidden>
+          <p class="empty-title">No devices connected</p>
+          <p class="muted">Connect your phone, laptop or another device to start sharing.</p>
+          <button class="btn btn-primary" id="btn-connect-device-empty">Connect Device</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>This Device</h3></div>
+        <div class="this-device-row">
+          <div>
+            <p class="strong" id="this-device-name">—</p>
+            <p class="muted" id="this-device-type">—</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btn-rename-device">Rename</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- HISTORY ---------- -->
+    <section class="view" data-view="history">
+      <div class="card">
+        <div class="search-row">
+          <svg class="i muted" viewBox="0 0 24 24" width="18" height="18"><path d="m21 21-4.35-4.35A7.5 7.5 0 1 0 15 18l4.35 4.35ZM5 10.5A5.5 5.5 0 1 1 10.5 16 5.51 5.51 0 0 1 5 10.5Z" fill="currentColor"/></svg>
+          <input type="search" id="history-search" placeholder="Search clipboard..." aria-label="Search clipboard history">
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab active" role="tab" aria-selected="true" data-tab="all">All</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="favorites">⭐ Favorites</button>
+        </div>
+      </div>
+      <div id="history-groups"></div>
+      <div class="empty-state" id="history-empty" hidden>
+        <p class="empty-title">No clipboard history yet</p>
+        <p class="muted">Synced text will show up here.</p>
+      </div>
+    </section>
+
+    <!-- ---------- FILES ---------- -->
+    <section class="view" data-view="files">
+      <div class="card">
+        <div class="card-header"><h3>Send File</h3></div>
+        <label class="dropzone" id="file-dropzone" for="file-input">
+          <svg class="i" viewBox="0 0 24 24" width="28" height="28"><path d="M12 3a1 1 0 0 1 1 1v9.59l2.3-2.3a1 1 0 1 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1ZM5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Z" fill="currentColor"/></svg>
+          <span>Tap to choose a file, or drag one here</span>
+          <span class="muted small">Images, documents, ZIPs, video — sent directly to connected devices</span>
+          <input type="file" id="file-input" hidden>
+        </label>
+      </div>
+      <div class="card" id="transfer-progress-card" hidden>
+        <div class="card-header"><h3>Transfers</h3></div>
+        <ul id="transfer-list" class="transfer-list"></ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Received Files</h3></div>
+        <ul id="files-list" class="files-list"></ul>
+        <div class="empty-state" id="files-empty" hidden>
+          <p class="empty-title">No files yet</p>
+          <p class="muted">Files sent from connected devices will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <section class="view" data-view="settings">
+      <div class="card">
+        <div class="card-header"><h3>General</h3></div>
+        <div class="setting-row">
+          <span>Device Name</span>
+          <button class="link-btn" id="settings-device-name">—</button>
+        </div>
+        <div class="setting-row">
+          <span>Clipboard Sync</span>
+          <label class="switch"><input type="checkbox" id="setting-clipboard-sync"><span class="slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <span>File Transfer</span>
+          <label class="switch"><input type="checkbox" id="setting-file-transfer"><span class="slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <span>Clipboard History</span>
+          <label class="switch"><input type="checkbox" id="setting-history-enabled"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>History</h3></div>
+        <div class="setting-row">
+          <span>Maximum history items</span>
+          <select id="setting-max-history">
+            <option value="50">50</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+            <option value="0">Unlimited</option>
+          </select>
+        </div>
+        <button class="btn btn-outline btn-danger-outline full-width" id="btn-clear-history-settings">Clear History</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Privacy</h3></div>
+        <p class="muted">LocalDrop is designed for local device-to-device sharing. Clipboard content should remain between your connected devices and should not be uploaded to a third-party cloud service.</p>
+        <div class="setting-row">
+          <span>Auto-delete history after</span>
+          <select id="setting-auto-delete">
+            <option value="0">Never</option>
+            <option value="1">1 day</option>
+            <option value="7">7 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+        <button class="btn btn-outline btn-danger-outline full-width" id="btn-clear-history-privacy">Clear Clipboard History</button>
+        <button class="btn btn-outline btn-danger-outline full-width" id="btn-disconnect-all">Disconnect All Devices</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Appearance</h3></div>
+        <div class="segmented" role="radiogroup" aria-label="Theme">
+          <button role="radio" data-theme="dark">Dark</button>
+          <button role="radio" data-theme="light">Light</button>
+          <button role="radio" data-theme="system">System</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Connection</h3></div>
+        <div class="setting-row">
+          <span>Show device on local network</span>
+          <label class="switch"><input type="checkbox" id="setting-show-network"><span class="slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <span>Require pairing confirmation</span>
+          <label class="switch"><input type="checkbox" id="setting-require-confirm"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Demo Mode</h3></div>
+        <p class="muted">Simulate multiple devices in separate browser tabs to test sync without physical hardware. Demo devices only connect to other tabs of this same browser — see Help.</p>
+        <button class="btn btn-outline full-width" id="btn-demo-mode">Start Demo Mode</button>
+      </div>
+
+      <div class="card">
+        <button class="btn btn-ghost full-width" data-nav="help">Help &amp; Limitations</button>
+      </div>
+    </section>
+
+    <!-- ---------- HELP ---------- -->
+    <section class="view" data-view="help">
+      <div class="card">
+        <h3>How syncing actually works</h3>
+        <p>LocalDrop has no server. Two devices connect to each other directly (WebRTC), and the very first connection has to be made by <strong>you</strong> — by scanning a QR code or exchanging a short manual code between the two devices. After that, clipboard text and files flow directly between them with nothing in the middle.</p>
+      </div>
+      <div class="card">
+        <h3>About "automatic" clipboard sync</h3>
+        <p>Browsers don't provide a way to watch the clipboard continuously in the background — that's a deliberate privacy restriction, not a LocalDrop limitation. When your browser grants clipboard-read permission, LocalDrop reads it when you tap <strong>Sync Clipboard</strong>, and opportunistically when this tab regains focus. If your browser blocks programmatic reads entirely, use <strong>Paste &amp; Sync</strong> instead.</p>
+      </div>
+      <div class="card">
+        <h3>About Demo Mode</h3>
+        <p>Demo Mode uses a browser feature called BroadcastChannel, which only reaches other tabs/windows open in this same browser on this same device. It's genuinely useful for testing the multi-device sync flow — favoriting, history, loop prevention — without needing a second physical device. It is not a way to reach your actual phone or laptop; use Connect Device (QR or Manual Code) for that. One quirk worth knowing: because demo tabs share the same browser storage, clipboard history can look shared between them even though the sync messages themselves travel one at a time, correctly, over BroadcastChannel — on two separate real devices, history is never shared this way.</p>
+      </div>
+      <div class="card">
+        <h3>About Manual Code pairing</h3>
+        <p>The "code" is a compressed copy of the real connection handshake, grouped into chunks for readability. It's longer than a 6-digit PIN because, without a server to look codes up against, the code has to carry the whole handshake itself. QR Code pairing carries the same data — just scanned instead of typed.</p>
+      </div>
+      <div class="card">
+        <h3>Local network only</h3>
+        <p>LocalDrop never uses third-party STUN/TURN or relay servers, so connections are limited to devices that can reach each other directly — typically the same Wi-Fi network. It also means it won't work across two different networks (e.g. over mobile data).</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ Mobile bottom nav ============ -->
+  <nav class="bottom-nav mobile-only" aria-label="Main navigation">
+    <button class="nav-item" data-nav="home" aria-current="page">
+      <svg class="i" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" data-nav="clipboard">
+      <svg class="i" viewBox="0 0 24 24"><path d="M9 3h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1V4a1 1 0 0 1 1-1Zm0 2v2h6V5H9Z" fill="currentColor"/></svg>
+      <span>Clipboard</span>
+    </button>
+    <button class="nav-item" data-nav="devices">
+      <svg class="i" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm5 16.2a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2ZM7 4v13h10V4H7Z" fill="currentColor"/></svg>
+      <span>Devices</span>
+    </button>
+    <button class="nav-item" data-nav="history">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 1-8.94 10H5.1A7 7 0 1 0 12 5v4L7 5.5 12 2v1Z" fill="currentColor"/></svg>
+      <span>History</span>
+    </button>
+    <button class="nav-item" data-nav="settings">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 8.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5Zm8.4 2.1-1.8-.3a6.8 6.8 0 0 0-.6-1.5l1.1-1.5a1 1 0 0 0-.1-1.3l-1-1a1 1 0 0 0-1.3-.1l-1.5 1.1a6.8 6.8 0 0 0-1.5-.6l-.3-1.8A1 1 0 0 0 12.4 3h-1.4a1 1 0 0 0-1 .8l-.3 1.8a6.8 6.8 0 0 0-1.5.6L6.7 5.1a1 1 0 0 0-1.3.1l-1 1a1 1 0 0 0-.1 1.3l1.1 1.5a6.8 6.8 0 0 0-.6 1.5l-1.8.3a1 1 0 0 0-.8 1v1.4a1 1 0 0 0 .8 1l1.8.3c.14.53.35 1.03.6 1.5l-1.1 1.5a1 1 0 0 0 .1 1.3l1 1a1 1 0 0 0 1.3.1l1.5-1.1c.47.25.97.46 1.5.6l.3 1.8a1 1 0 0 0 1 .8h1.4a1 1 0 0 0 1-.8l.3-1.8c.53-.14 1.03-.35 1.5-.6l1.5 1.1a1 1 0 0 0 1.3-.1l1-1a1 1 0 0 0 .1-1.3l-1.1-1.5c.25-.47.46-.97.6-1.5l1.8-.3a1 1 0 0 0 .8-1v-1.4a1 1 0 0 0-.8-1Z" fill="currentColor"/></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ Toasts ============ -->
+<div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ============ Modal root ============ -->
+<div id="modal-root" class="modal-root" hidden>
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+  <div class="modal-panel" id="modal-panel" role="dialog" aria-modal="true"></div>
+</div>
+
+<!-- ============ Templates ============ -->
+<template id="tpl-connect-device">
+  <div class="modal-header">
+    <h2>Connect Device</h2>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab active" role="tab" data-pair-tab="qr">QR Code</button>
+    <button class="tab" role="tab" data-pair-tab="manual">Manual Code</button>
+    <button class="tab" role="tab" data-pair-tab="demo">Demo Device</button>
+  </div>
+
+  <div class="pair-pane" data-pair-pane="qr">
+    <div class="pair-subtabs">
+      <button class="chip active" data-qr-mode="host">Show my code</button>
+      <button class="chip" data-qr-mode="scan">Scan a code</button>
+    </div>
+    <div data-qr-host>
+      <p class="muted small">Have the other device scan this. It expires in <span id="qr-expiry">5:00</span>.</p>
+      <div class="qr-wrap"><canvas id="qr-canvas" width="260" height="260"></canvas></div>
+      <div id="qr-host-waiting" class="pair-status">Waiting for the other device to scan and respond…</div>
+      <div class="pair-row" data-qr-host-answer-scan hidden>
+        <p class="muted small">Now scan the reply code from the other device:</p>
+        <button class="btn btn-outline full-width" data-open-scan-for="answer">Scan Reply Code</button>
+        <p class="muted small">Or paste it:</p>
+        <textarea id="qr-answer-paste" class="mono" rows="3" placeholder="Paste reply code here"></textarea>
+        <button class="btn btn-primary full-width" id="btn-submit-answer-paste">Complete Pairing</button>
+      </div>
+    </div>
+    <div data-qr-scan hidden>
+      <video id="qr-video" playsinline muted></video>
+      <p class="muted small" id="qr-scan-hint">Point your camera at the other device's code.</p>
+      <button class="btn btn-outline full-width" id="btn-cancel-scan">Cancel</button>
+    </div>
+  </div>
+
+  <div class="pair-pane" data-pair-pane="manual" hidden>
+    <div class="pair-subtabs">
+      <button class="chip active" data-manual-mode="host">Show my code</button>
+      <button class="chip" data-manual-mode="join">Enter a code</button>
+    </div>
+    <div data-manual-host>
+      <p class="muted small">Send this code to the other device (message, email, read aloud). It expires in <span id="manual-expiry">5:00</span>.</p>
+      <textarea id="manual-offer-code" class="mono" rows="4" readonly></textarea>
+      <button class="btn btn-outline full-width" id="btn-copy-manual-offer">Copy Code</button>
+      <p class="muted small">Then paste the reply code you get back:</p>
+      <textarea id="manual-answer-paste" class="mono" rows="4" placeholder="Paste reply code here"></textarea>
+      <button class="btn btn-primary full-width" id="btn-submit-manual-answer">Complete Pairing</button>
+    </div>
+    <div data-manual-join hidden>
+      <p class="muted small">Paste the code shown on the other device:</p>
+      <textarea id="manual-offer-paste" class="mono" rows="4" placeholder="Paste their code here"></textarea>
+      <button class="btn btn-primary full-width" id="btn-generate-manual-reply">Generate Reply Code</button>
+      <div id="manual-reply-wrap" hidden>
+        <p class="muted small">Send this reply back to them:</p>
+        <textarea id="manual-reply-code" class="mono" rows="4" readonly></textarea>
+        <button class="btn btn-outline full-width" id="btn-copy-manual-reply">Copy Reply Code</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pair-pane" data-pair-pane="demo" hidden>
+    <p class="muted small">Adds a simulated device that only appears in other tabs of this browser — for testing, not real cross-device sync.</p>
+    <label class="field-label" for="demo-device-name">Simulated device name</label>
+    <select id="demo-device-name">
+      <option>Demo Phone</option>
+      <option>Demo Laptop</option>
+      <option>Demo Tablet</option>
+      <option>Demo Desktop</option>
+    </select>
+    <button class="btn btn-primary full-width" id="btn-start-demo">Start Demo Device</button>
+  </div>
+</template>
+
+<template id="tpl-pairing-confirm">
+  <div class="modal-header"><h2>New device wants to connect</h2></div>
+  <p class="pairing-confirm-name" id="pairing-confirm-name"></p>
+  <p class="muted small">Only accept this if you recognize the device.</p>
+  <div class="modal-actions">
+    <button class="btn btn-outline full-width" id="btn-reject-pair">Reject</button>
+    <button class="btn btn-primary full-width" id="btn-accept-pair">Accept</button>
+  </div>
+</template>
+
+<template id="tpl-view-text">
+  <div class="modal-header">
+    <h2>Clipboard content</h2>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+  </div>
+  <p class="muted small" id="view-text-meta"></p>
+  <pre class="text-viewer mono" id="view-text-body" tabindex="0"></pre>
+  <div class="modal-actions">
+    <button class="btn btn-outline" id="btn-view-copy">Copy</button>
+    <button class="btn btn-outline" id="btn-view-save">Save as file</button>
+  </div>
+</template>
+
+<template id="tpl-edit-text">
+  <div class="modal-header">
+    <h2>Edit clipboard entry</h2>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+  </div>
+  <textarea id="edit-text-body" class="text-editor mono"></textarea>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" id="btn-edit-cancel">Cancel</button>
+    <button class="btn btn-outline" id="btn-edit-save">Save</button>
+    <button class="btn btn-primary" id="btn-edit-sync">Save &amp; Sync</button>
+  </div>
+</template>
+
+<template id="tpl-rename-device">
+  <div class="modal-header"><h2>Rename device</h2></div>
+  <input type="text" id="rename-input" class="text-input" maxlength="40">
+  <div class="modal-actions">
+    <button class="btn btn-ghost" data-close-modal>Cancel</button>
+    <button class="btn btn-primary" id="btn-rename-save">Save</button>
+  </div>
+</template>
+
+<template id="tpl-confirm">
+  <div class="modal-header"><h2 id="confirm-title">Are you sure?</h2></div>
+  <p class="muted" id="confirm-body"></p>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" data-close-modal>Cancel</button>
+    <button class="btn btn-primary btn-danger" id="btn-confirm-yes">Confirm</button>
+  </div>
+</template>
+
+<script src="assets/vendor/qrcode.min.js"></script>
+<script src="assets/vendor/jsQR.js"></script>
+<script src="storage.js"></script>
+<script src="clipboard.js"></script>
+<script src="devices.js"></script>
+<script src="pairing.js"></script>
+<script src="history.js"></script>
+<script src="transfer.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
