@@ -3,9 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>LocalDrop — Local clipboard &amp; file sync</title>
 <meta name="description" content="LocalDrop syncs your clipboard and files between your own devices on the local network. No cloud, no accounts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><text y=%2220%22 font-size=%2220%22>🔗</text></svg>">
+<link rel="icon" type="image/png" href="icons/icon-192.png"><text y=%2220%22 font-size=%2220%22>🔗</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -344,10 +350,11 @@
     <h2>Connect Device</h2>
     <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
   </div>
+  <p class="connect-lead">Link your phone and laptop in about 10 seconds. Open LocalDrop on both, then pick a way:</p>
   <div class="tabs" role="tablist">
-    <button class="tab active" role="tab" data-pair-tab="qr">QR Code</button>
-    <button class="tab" role="tab" data-pair-tab="manual">Manual Code</button>
-    <button class="tab" role="tab" data-pair-tab="demo">Demo Device</button>
+    <button class="tab active" role="tab" data-pair-tab="qr">📷 Scan QR</button>
+    <button class="tab" role="tab" data-pair-tab="manual">🔑 Code</button>
+    <button class="tab" role="tab" data-pair-tab="demo">🧪 Demo</button>
   </div>
 
   <div class="pair-pane" data-pair-pane="qr">
@@ -357,8 +364,8 @@
     </div>
     <div data-qr-host>
       <p class="muted small">Have the other device scan this. It expires in <span id="qr-expiry">5:00</span>.</p>
-      <div class="qr-wrap"><canvas id="qr-canvas" width="260" height="260"></canvas></div>
-      <div id="qr-host-waiting" class="pair-status">Waiting for the other device to scan and respond…</div>
+      <div class="qr-wrap scan-frame"><i></i><canvas id="qr-canvas" width="260" height="260"></canvas></div>
+      <div id="qr-host-waiting" class="pair-status pulse">Waiting for the other device to scan and respond…</div>
       <div class="pair-row" data-qr-host-answer-scan hidden>
         <p class="muted small">Now scan the reply code from the other device:</p>
         <button class="btn btn-outline full-width" data-open-scan-for="answer">Scan Reply Code</button>
@@ -382,7 +389,7 @@
     <div data-manual-host>
       <p class="muted small">Send this code to the other device (message, email, read aloud). It expires in <span id="manual-expiry">5:00</span>.</p>
       <textarea id="manual-offer-code" class="mono" rows="4" readonly></textarea>
-      <button class="btn btn-outline full-width" id="btn-copy-manual-offer">Copy Code</button>
+      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-outline" id="btn-copy-manual-offer">Copy</button><button class="btn btn-outline" id="btn-share-manual-offer">Share</button></div>
       <p class="muted small">Then paste the reply code you get back:</p>
       <textarea id="manual-answer-paste" class="mono" rows="4" placeholder="Paste reply code here"></textarea>
       <button class="btn btn-primary full-width" id="btn-submit-manual-answer">Complete Pairing</button>
@@ -390,7 +397,7 @@
     <div data-manual-join hidden>
       <p class="muted small">Paste the code shown on the other device:</p>
       <textarea id="manual-offer-paste" class="mono" rows="4" placeholder="Paste their code here"></textarea>
-      <button class="btn btn-primary full-width" id="btn-generate-manual-reply">Generate Reply Code</button>
+      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-secondary" id="btn-paste-clip-code">📋 Paste &amp; Connect</button><button class="btn btn-primary" id="btn-generate-manual-reply">Connect</button></div>
       <div id="manual-reply-wrap" hidden>
         <p class="muted small">Send this reply back to them:</p>
         <textarea id="manual-reply-code" class="mono" rows="4" readonly></textarea>
@@ -475,5 +482,6 @@
 <script src="history.js"></script>
 <script src="transfer.js"></script>
 <script src="app.js"></script>
+<script src="pwa.js"></script>
 </body>
 </html>

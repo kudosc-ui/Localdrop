@@ -429,3 +429,32 @@ main {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
+
+/* ===== Full-screen layout: use the whole viewport, no centered narrow column ===== */
+html, body { height: 100%; overflow: hidden; }
+body { height: 100dvh; }
+.app-shell { height: 100%; min-height: 0; width: 100%; grid-template-rows: auto minmax(0, 1fr); }
+main { max-width: none; width: 100%; height: 100%; min-height: 0; overflow-y: auto; padding: 20px clamp(14px, 2.4vw, 40px) 40px; }
+.view.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; align-content: start; }
+.view > .hero-card, .view > #history-groups, .view > .empty-state, .view > .card:only-child { grid-column: 1 / -1; }
+.card { border-radius: 14px; box-shadow: none; }
+.hero-card { background: linear-gradient(120deg, var(--accent-dim), var(--card) 60%); }
+@media (max-width: 860px) {
+  .app-shell { grid-template-rows: auto minmax(0, 1fr); }
+  main { padding: 14px 14px calc(24px + var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)); }
+  .view.active { grid-template-columns: 1fr; }
+}
+
+/* ===== Connect device: cleaner, friendlier ===== */
+.modal-panel { max-width: 520px; }
+.connect-lead { margin: 0 0 12px; color: var(--text-muted); font-size: 0.88rem; }
+.tabs .tab { flex: 1; padding: 9px 10px; }
+.scan-frame { position: relative; background: #fff1; overflow: hidden; }
+.scan-frame::before, .scan-frame::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scanline 2.4s ease-in-out infinite; }
+.scan-frame::after { display: none; }
+@keyframes scanline { 0%, 100% { top: 8%; } 50% { top: 92%; } }
+.pair-status.pulse { display: flex; gap: 8px; align-items: center; justify-content: center; }
+.pair-status.pulse::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--warning); animation: pulseDot 1.2s ease-in-out infinite; }
+@keyframes pulseDot { 50% { transform: scale(1.6); opacity: 0.4; } }
+.connected-ok { text-align: center; padding: 28px 8px; }
+.ok-ring { width: 72px; height: 72px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center; font-size: 2rem; color: #fff; background: var(--success); animation: popIn 0.35s ease; box-shadow: 0 0 0 10px rgba(53,209,143,0.16); }

@@ -67,15 +67,65 @@ const LocalDropClipboard = (() => {
       ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand('copy');
+      const done = document.execCommand('copy');
       document.body.removeChild(ta);
-      return { ok: true };
+      return done ? { ok: true } : { ok: false };
     } catch (err) {
       return { ok: false, error: err };
     }
   }
 
+  // ---- Two-way OS clipboard sync ----
+  // lastSynced = the last text we sent OR wrote, so nothing echoes back and forth.
+  let lastSynced = null, pending = null, baselined = false, onPendingApplied = null;
+
+  // Incoming text from another device -> the real clipboard of THIS device.
+  // Browsers only allow writes while the page is focused / after a tap, so if it
+  // is refused we keep it pending and write it on the very next tap, key or focus.
+  async function applyRemote(text) {
+    lastSynced = text;
+    const r = await writeText(text);
+    pending = r.ok ? null : text;
+    return r.ok;
+  }
+  function flushPending() {
+    if (pending === null) return;
+    const t = pending;
+    writeText(t).then((r) => { if (r.ok && pending === t) { pending = null; onPendingApplied && onPendingApplied(); } });
+  }
+  ['pointerdown', 'keydown', 'touchstart', 'focus'].forEach((ev) => window.addEventListener(ev, flushPending, true));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) flushPending(); });
+
+  // Outgoing: watch this device's clipboard while the app is open and focused.
+  function startWatcher(onChange) {
+    const check = async () => {
+      if (document.hidden || !document.hasFocus() || !isSupported()) return;
+      if (permissionState !== 'granted') { await refreshPermissionState(); if (permissionState !== 'granted') return; }
+      const r = await readText();
+      if (!r.ok || !r.text) return;
+      if (!baselined) { baselined = true; lastSynced = r.text; return; } // ignore what was copied before we started
+      if (r.text === lastSynced) return;
+      lastSynced = r.text;
+      onChange(r.text);
+    };
+    setInterval(check, 1000);
+    window.addEventListener('focus', check);
+    document.addEventListener('visibilitychange', check);
+    ['copy', 'cut'].forEach((ev) => document.addEventListener(ev, () => setTimeout(check, 60)));
+    // First tap asks for clipboard-read permission once (browsers require a gesture-time prompt).
+    const ask = async () => {
+      window.removeEventListener('pointerdown', ask, true);
+      await refreshPermissionState();
+      if (permissionState === 'prompt' || permissionState === 'unknown') await readText();
+      check();
+    };
+    window.addEventListener('pointerdown', ask, true);
+    check();
+  }
+
   return {
+    applyRemote, startWatcher, markSynced: (t) => { lastSynced = t; },
+    hasPending: () => pending !== null, onPendingApplied: (fn) => { onPendingApplied = fn; },
     isSupported,
     refreshPermissionState,
     readText,

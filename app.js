@@ -264,6 +264,7 @@
     const entry = await Storage.addHistoryEntry({ text, originDeviceId: identity.id, originDeviceName: originDeviceName || identity.name + ' (you)' });
     latestClipboardId = entry ? entry.id : null;
     latestFallback = entry ? null : { text, timestamp: Date.now(), originDeviceName: originDeviceName || identity.name + ' (you)' };
+    Clip.markSynced(text);
     if (broadcast && Storage.getSettings().clipboardSyncEnabled) {
       Devices.sendClipboardUpdate(text);
     }
@@ -316,24 +317,6 @@
   $('#btn-paste-sync').addEventListener('click', openPasteAndSync);
   $('#btn-copy-latest').addEventListener('click', doCopyLatest);
   $('#btn-clear-latest').addEventListener('click', doClearLatest);
-
-  // Opportunistic sync when the tab regains focus — only if permission is
-  // already granted (never triggers a permission prompt), and only if the
-  // content actually changed. This is the closest to "automatic" that
-  // browsers honestly allow — see Help.
-  window.addEventListener('focus', async () => {
-    if (!Storage.getSettings().clipboardSyncEnabled) return;
-    if (!Clip.isSupported()) return;
-    await Clip.refreshPermissionState();
-    if (Clip.getPermissionState() !== 'granted') return;
-    const res = await Clip.readText();
-    if (res.ok && res.text) {
-      const list = await History.list();
-      if (list[0]?.preview !== res.text.slice(0, 300)) {
-        await commitClipboardText(res.text, true);
-      }
-    }
-  });
 
   // ================= View text / Edit text modals =================
 
@@ -508,7 +491,13 @@
 
       setupQrPane(panel);
 
-      return () => { Pairing.stopScan(); if (pendingPairSession) pendingPairSession = null; };
+      const onConn = (e) => {
+        Pairing.stopScan();
+        panel.innerHTML = `<div class="connected-ok"><div class="ok-ring">✓</div><h2>Connected</h2><p class="muted">${escapeHtml(e.detail.name)} is linked. Anything you copy on one device now lands on the other.</p></div>`;
+        setTimeout(closeModal, 1800);
+      };
+      Devices.on('device-connected', onConn);
+      return () => { Devices.off('device-connected', onConn); Pairing.stopScan(); if (pendingPairSession) pendingPairSession = null; };
     });
   }
 
@@ -624,17 +613,30 @@
       try { await tryCompletePairing(Pairing.fromManualCode(raw)); }
       catch { toast('That code looks invalid'); }
     });
+    $('#btn-paste-clip-code', panel).addEventListener('click', async () => {
+      const r = await Clip.readText();
+      if (!r.ok || !r.text) return toast('Could not read the clipboard — paste into the box instead');
+      $('#manual-offer-paste', panel).value = r.text;
+      $('#btn-generate-manual-reply', panel).click();
+    });
+    $('#btn-share-manual-offer', panel).addEventListener('click', async () => {
+      const code = $('#manual-offer-code', panel).value;
+      if (navigator.share) { try { await navigator.share({ title: 'LocalDrop pairing code', text: code }); return; } catch { return; } }
+      await Clip.writeText(code); toast('Code copied — send it to your other device');
+    });
     $('#btn-generate-manual-reply', panel).addEventListener('click', async () => {
       const raw = $('#manual-offer-paste', panel).value.trim();
       if (!raw) return toast('Paste their code first');
       let offerText;
       try { offerText = Pairing.fromManualCode(raw); } catch { return toast('That code looks invalid'); }
+      if (JSON.parse(offerText).kind === 'answer') return tryCompletePairing(offerText); // smart: a reply code finishes pairing
       const proceed = await requestPairingConfirmation(offerText);
       if (!proceed) return toast('Pairing rejected');
       try {
         const { text } = await Devices.acceptOfferPackage(offerText);
         $('#manual-reply-code', panel).value = Pairing.toManualCode(text);
         $('#manual-reply-wrap', panel).hidden = false;
+        Clip.writeText($('#manual-reply-code', panel).value).then((r) => r.ok && toast('Reply code copied — send it back'));
       } catch (err) {
         toast('Could not use that code: ' + err.message);
       }
@@ -924,7 +926,8 @@
     const entry = await Storage.addHistoryEntry({ text: data.text, originDeviceId: data.originDeviceId, originDeviceName: data.originDeviceName });
     latestClipboardId = entry ? entry.id : null;
     latestFallback = entry ? null : { text: data.text, timestamp: Date.now(), originDeviceName: data.originDeviceName };
-    toast(`Text received from ${data.originDeviceName}`);
+    const copied = Storage.getSettings().clipboardSyncEnabled ? await Clip.applyRemote(data.text) : false;
+    toast(copied ? `Copied from ${data.originDeviceName} — just paste` : Clip.hasPending() ? `From ${data.originDeviceName} — tap anywhere to copy it` : `Text received from ${data.originDeviceName}`);
     renderLatestClipboard(); renderHomeRecent();
     if (currentView === 'history') renderHistory();
   });
@@ -954,6 +957,12 @@
     renderQuickSendTargets();
     refreshStatus();
     await Clip.refreshPermissionState();
+    Clip.onPendingApplied(() => toast('Copied to your clipboard — paste anywhere'));
+    Clip.startWatcher((text) => {
+      if (!Storage.getSettings().clipboardSyncEnabled) return;
+      if (!Devices.listPeers().some((p) => p.status === 'connected')) return;
+      commitClipboardText(text, true);
+    });
     navigate('home');
   }
 
