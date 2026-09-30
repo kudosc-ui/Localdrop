@@ -219,7 +219,7 @@ const LocalDropDevices = (() => {
 
   // ---------------- WebRTC pairing (no signaling server — manual/QR handshake) ----------------
 
-  const RTC_CONFIG = { iceServers: [] }; // intentionally no STUN/TURN — local network only, no third-party cloud
+  const RTC_CONFIG = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun.cloudflare.com:3478'] }] }; // STUN only discovers addresses; no data goes through it
 
   const pendingOffers = new Map(); // sessionId -> { pc, channel }
 

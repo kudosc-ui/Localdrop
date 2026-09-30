@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>LocalDrop — Local clipboard &amp; file sync</title>
 <meta name="description" content="LocalDrop syncs your clipboard and files between your own devices on the local network. No cloud, no accounts.">
-<link rel="icon" type="image/png" href="icons/icon-192.png"><text y=%2220%22 font-size=%2220%22>🔗</text></svg>">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -165,7 +165,7 @@
         </div>
         <div class="tabs" role="tablist">
           <button class="tab active" role="tab" aria-selected="true" data-tab="all">All</button>
-          <button class="tab" role="tab" aria-selected="false" data-tab="favorites">⭐ Favorites</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="favorites">Favorites</button>
         </div>
       </div>
       <div id="history-groups"></div>
@@ -348,66 +348,30 @@
 <template id="tpl-connect-device">
   <div class="modal-header">
     <h2>Connect Device</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
   </div>
-  <p class="connect-lead">Link your phone and laptop in about 10 seconds. Open LocalDrop on both, then pick a way:</p>
   <div class="tabs" role="tablist">
-    <button class="tab active" role="tab" data-pair-tab="qr">📷 Scan QR</button>
-    <button class="tab" role="tab" data-pair-tab="manual">🔑 Code</button>
-    <button class="tab" role="tab" data-pair-tab="demo">🧪 Demo</button>
+    <button class="tab active" role="tab" data-pair-tab="show">Show code</button>
+    <button class="tab" role="tab" data-pair-tab="enter">Enter code</button>
+    <button class="tab" role="tab" data-pair-tab="demo">Demo</button>
   </div>
-
-  <div class="pair-pane" data-pair-pane="qr">
-    <div class="pair-subtabs">
-      <button class="chip active" data-qr-mode="host">Show my code</button>
-      <button class="chip" data-qr-mode="scan">Scan a code</button>
-    </div>
-    <div data-qr-host>
-      <p class="muted small">Have the other device scan this. It expires in <span id="qr-expiry">5:00</span>.</p>
-      <div class="qr-wrap scan-frame"><i></i><canvas id="qr-canvas" width="260" height="260"></canvas></div>
-      <div id="qr-host-waiting" class="pair-status pulse">Waiting for the other device to scan and respond…</div>
-      <div class="pair-row" data-qr-host-answer-scan hidden>
-        <p class="muted small">Now scan the reply code from the other device:</p>
-        <button class="btn btn-outline full-width" data-open-scan-for="answer">Scan Reply Code</button>
-        <p class="muted small">Or paste it:</p>
-        <textarea id="qr-answer-paste" class="mono" rows="3" placeholder="Paste reply code here"></textarea>
-        <button class="btn btn-primary full-width" id="btn-submit-answer-paste">Complete Pairing</button>
-      </div>
-    </div>
-    <div data-qr-scan hidden>
-      <video id="qr-video" playsinline muted></video>
-      <p class="muted small" id="qr-scan-hint">Point your camera at the other device's code.</p>
-      <button class="btn btn-outline full-width" id="btn-cancel-scan">Cancel</button>
-    </div>
+  <div class="pair-pane" data-pair-pane="show">
+    <p class="muted small">On the other device open LocalDrop, choose <b>Enter code</b> and type this code (or scan the QR). Expires in 5 minutes.</p>
+    <div class="pair-code" id="pair-code">...</div>
+    <div class="qr-wrap"><canvas id="qr-canvas" width="260" height="260"></canvas></div>
+    <div id="pair-host-status" class="pair-status pulse">Waiting for the other device...</div>
+    <button class="btn btn-outline full-width" id="btn-new-code">New code</button>
   </div>
-
-  <div class="pair-pane" data-pair-pane="manual" hidden>
-    <div class="pair-subtabs">
-      <button class="chip active" data-manual-mode="host">Show my code</button>
-      <button class="chip" data-manual-mode="join">Enter a code</button>
-    </div>
-    <div data-manual-host>
-      <p class="muted small">Send this code to the other device (message, email, read aloud). It expires in <span id="manual-expiry">5:00</span>.</p>
-      <textarea id="manual-offer-code" class="mono" rows="4" readonly></textarea>
-      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-outline" id="btn-copy-manual-offer">Copy</button><button class="btn btn-outline" id="btn-share-manual-offer">Share</button></div>
-      <p class="muted small">Then paste the reply code you get back:</p>
-      <textarea id="manual-answer-paste" class="mono" rows="4" placeholder="Paste reply code here"></textarea>
-      <button class="btn btn-primary full-width" id="btn-submit-manual-answer">Complete Pairing</button>
-    </div>
-    <div data-manual-join hidden>
-      <p class="muted small">Paste the code shown on the other device:</p>
-      <textarea id="manual-offer-paste" class="mono" rows="4" placeholder="Paste their code here"></textarea>
-      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-secondary" id="btn-paste-clip-code">📋 Paste &amp; Connect</button><button class="btn btn-primary" id="btn-generate-manual-reply">Connect</button></div>
-      <div id="manual-reply-wrap" hidden>
-        <p class="muted small">Send this reply back to them:</p>
-        <textarea id="manual-reply-code" class="mono" rows="4" readonly></textarea>
-        <button class="btn btn-outline full-width" id="btn-copy-manual-reply">Copy Reply Code</button>
-      </div>
-    </div>
+  <div class="pair-pane" data-pair-pane="enter" hidden>
+    <label class="field-label" for="pair-code-input">Code from the other device</label>
+    <input id="pair-code-input" class="pair-code-input" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="XXXX-XXXX">
+    <button class="btn btn-primary full-width" id="btn-join-code">Connect</button>
+    <video id="qr-video" playsinline muted hidden></video>
+    <button class="btn btn-outline full-width" id="btn-scan-code">Scan QR instead</button>
+    <div id="pair-join-status" class="muted small"></div>
   </div>
-
   <div class="pair-pane" data-pair-pane="demo" hidden>
-    <p class="muted small">Adds a simulated device that only appears in other tabs of this browser — for testing, not real cross-device sync.</p>
+    <p class="muted small">Adds a simulated device that only appears in other tabs of this browser. For testing only.</p>
     <label class="field-label" for="demo-device-name">Simulated device name</label>
     <select id="demo-device-name">
       <option>Demo Phone</option>
@@ -432,7 +396,7 @@
 <template id="tpl-view-text">
   <div class="modal-header">
     <h2>Clipboard content</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
   </div>
   <p class="muted small" id="view-text-meta"></p>
   <pre class="text-viewer mono" id="view-text-body" tabindex="0"></pre>
@@ -445,7 +409,7 @@
 <template id="tpl-edit-text">
   <div class="modal-header">
     <h2>Edit clipboard entry</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
   </div>
   <textarea id="edit-text-body" class="text-editor mono"></textarea>
   <div class="modal-actions">
@@ -479,6 +443,7 @@
 <script src="clipboard.js"></script>
 <script src="devices.js"></script>
 <script src="pairing.js"></script>
+<script src="signal.js"></script>
 <script src="history.js"></script>
 <script src="transfer.js"></script>
 <script src="app.js"></script>

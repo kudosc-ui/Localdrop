@@ -1,6 +1,6 @@
 // LocalDrop service worker — offline app shell (bump VERSION to force an update).
-const VERSION = 'localdrop-v1';
-const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'storage.js', 'clipboard.js', 'devices.js', 'pairing.js', 'history.js', 'transfer.js', 'pwa.js',
+const VERSION = 'localdrop-v2';
+const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'storage.js', 'clipboard.js', 'devices.js', 'pairing.js', 'signal.js', 'history.js', 'transfer.js', 'pwa.js',
   'assets/vendor/qrcode.min.js', 'assets/vendor/jsQR.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
@@ -16,4 +16,8 @@ self.addEventListener('fetch', (e) => {
       .catch(() => hit || (req.mode === 'navigate' ? caches.match('index.html') : undefined));
     return hit || net;
   }));
+});
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window' }).then((cs) => (cs[0] ? cs[0].focus() : self.clients.openWindow('./index.html'))));
 });
