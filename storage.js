@@ -1,3 +1,4 @@
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 // storage.js — IndexedDB persistence layer for LocalDrop.
 // Large clipboard text and files live in IndexedDB (not localStorage) so the
 // app stays responsive with big payloads. Small config lives in localStorage.

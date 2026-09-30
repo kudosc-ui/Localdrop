@@ -1,3 +1,4 @@
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 // history.js — clipboard history feature logic: grouping, formatting, favorites,
 // and search, built on the raw IndexedDB layer in storage.js.
 

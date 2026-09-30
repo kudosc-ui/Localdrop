@@ -1,0 +1,75 @@
+LOCALDROP PROPRIETARY LICENSE
+Version 1.0
+
+Copyright (c) 2026 CodeZing. All rights reserved.
+Owner and author: CodeZing (YouTuber)
+Official channel: https://youtube.com/@kudosc
+
+LocalDrop (the "Software") includes all source code, markup, stylesheets,
+scripts, design, layout, text, icons, artwork, branding, and documentation
+in this package, other than the Third-Party Components listed in section 8.
+
+1. OWNERSHIP
+   The Software is licensed, not sold. CodeZing (the "Owner") retains all
+   right, title, and interest in and to the Software, including all
+   intellectual property rights.
+
+2. PERMITTED USE
+   Subject to this license, you may use the officially published version of
+   LocalDrop, as provided by the Owner, for your own personal,
+   non-commercial purposes on your own devices.
+
+3. RESTRICTIONS
+   Without the Owner's prior written permission, you may NOT:
+   a) sell, resell, rent, lease, sublicense, or otherwise commercially
+      exploit the Software or any part of it;
+   b) copy, host, mirror, publish, or redistribute the Software, in whole or
+      in part, on any website, app store, package registry, or other
+      platform, whether free or paid;
+   c) modify, adapt, translate, or create derivative works of the Software;
+   d) rebrand, re-skin, or present the Software, or any part of it, as your
+      own work or under any other name;
+   e) remove, alter, or obscure any copyright notice, license notice,
+      attribution, or creator credit in the Software or its interface;
+   f) repackage the Software (for example as an APK, AAB, desktop app, or
+      template) for distribution or sale;
+   g) use the Software or its source code to build, train, or market a
+      competing or substantially similar product.
+
+4. PERMISSION REQUESTS
+   To request written permission for any use not allowed above, contact the
+   Owner through the official channel: https://youtube.com/@kudosc
+   Permission is only valid if given in writing by the Owner. Silence, lack
+   of enforcement, or public availability of the Software does not grant
+   permission.
+
+5. TERMINATION
+   This license ends automatically if you breach any of its terms. On
+   termination you must stop using the Software and delete all copies in
+   your possession.
+
+6. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+7. LIMITATION OF LIABILITY
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE OWNER SHALL NOT BE LIABLE FOR
+   ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+8. THIRD-PARTY COMPONENTS
+   The files in assets/vendor (QR code generation and QR code scanning
+   libraries) are third-party software. They are not owned by the Owner and
+   remain under their own original licenses, which are not changed by this
+   document.
+
+9. ENFORCEMENT
+   Unauthorized use, copying, distribution, or resale of the Software is a
+   violation of this license and of applicable copyright law. The Owner may
+   pursue all remedies available, including takedown notices (such as DMCA
+   requests) and legal action.
+
+By using the Software you agree to these terms.
+
+(c) 2026 CodeZing. All rights reserved.

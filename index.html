@@ -1,9 +1,24 @@
 <!DOCTYPE html>
+<!--
+  LocalDrop (c) 2026 CodeZing. All rights reserved.
+  Proprietary software. Copying, hosting, reselling or modifying without written
+  permission from the owner is prohibited. See LICENSE.
+  Official channel: https://youtube.com/@kudosc
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0d12">
+<meta name="theme-color" content="#0a0c11" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#eceff6" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<meta name="author" content="CodeZing">
+<meta name="copyright" content="(c) 2026 CodeZing. All rights reserved.">
+<meta property="og:title" content="LocalDrop — Local clipboard &amp; file sync">
+<meta property="og:description" content="Sync your clipboard and files between your own devices on the local network. No cloud, no accounts.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,7 +26,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>LocalDrop — Local clipboard &amp; file sync</title>
 <meta name="description" content="LocalDrop syncs your clipboard and files between your own devices on the local network. No cloud, no accounts.">
-<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +41,7 @@
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" width="22" height="22"><path d="M10 6a5 5 0 0 1 5 5v3h-3v-3a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2v3H8a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5h2Zm12 20a5 5 0 0 1-5-5v-3h3v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2v-3h2a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-2Z" fill="currentColor"/></svg>
       </span>
-      <span class="brand-name">LocalDrop</span>
+      <span><span class="brand-name">LocalDrop</span><span class="brand-sub">by CodeZing</span></span>
     </div>
     <ul class="sidebar-nav" role="list">
       <li><button class="nav-item" data-nav="home" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/></svg><span>Home</span></button></li>
@@ -36,10 +51,21 @@
       <li><button class="nav-item" data-nav="files"><svg class="i" viewBox="0 0 24 24"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5Z" fill="currentColor"/></svg><span>Files</span></button></li>
       <li><button class="nav-item" data-nav="settings"><svg class="i" viewBox="0 0 24 24"><path d="M12 8.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5Zm8.4 2.1-1.8-.3a6.8 6.8 0 0 0-.6-1.5l1.1-1.5a1 1 0 0 0-.1-1.3l-1-1a1 1 0 0 0-1.3-.1l-1.5 1.1a6.8 6.8 0 0 0-1.5-.6l-.3-1.8A1 1 0 0 0 12.4 3h-1.4a1 1 0 0 0-1 .8l-.3 1.8a6.8 6.8 0 0 0-1.5.6L6.7 5.1a1 1 0 0 0-1.3.1l-1 1a1 1 0 0 0-.1 1.3l1.1 1.5a6.8 6.8 0 0 0-.6 1.5l-1.8.3a1 1 0 0 0-.8 1v1.4a1 1 0 0 0 .8 1l1.8.3c.14.53.35 1.03.6 1.5l-1.1 1.5a1 1 0 0 0 .1 1.3l1 1a1 1 0 0 0 1.3.1l1.5-1.1c.47.25.97.46 1.5.6l.3 1.8a1 1 0 0 0 1 .8h1.4a1 1 0 0 0 1-.8l.3-1.8c.53-.14 1.03-.35 1.5-.6l1.5 1.1a1 1 0 0 0 1.3-.1l1-1a1 1 0 0 0 .1-1.3l-1.1-1.5c.25-.47.46-.97.6-1.5l1.8-.3a1 1 0 0 0 .8-1v-1.4a1 1 0 0 0-.8-1Z" fill="currentColor"/></svg><span>Settings</span></button></li>
     </ul>
+    <div class="sidebar-foot">
     <button class="sidebar-help" data-nav="help">
       <svg class="i" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm.9 15.5h-1.8v-1.8h1.8Zm1.86-6.9-.8.83c-.65.66-1 1.17-1 2.57h-1.8v-.45c0-1 .35-1.94 1-2.6l1.1-1.13a1.6 1.6 0 0 0 .49-1.17 1.66 1.66 0 1 0-3.32 0h-1.8a3.46 3.46 0 1 1 6.93 0 3.1 3.1 0 0 1-.7 1.95Z" fill="currentColor"/></svg>
       <span>Help</span>
     </button>
+    <button class="sidebar-help" data-nav="license">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16Z" fill="currentColor"/></svg>
+      <span>License</span>
+    </button>
+    <div class="sidebar-credit">
+      <strong>&copy; 2026 CodeZing</strong><br>
+      All rights reserved.<br>
+      <a href="https://www.youtube.com/@kudosc?sub_confirmation=1" target="_blank" rel="noopener noreferrer">Subscribe on YouTube</a>
+    </div>
+    </div>
   </nav>
 
   <!-- ============ Top bar ============ -->
@@ -165,7 +191,7 @@
         </div>
         <div class="tabs" role="tablist">
           <button class="tab active" role="tab" aria-selected="true" data-tab="all">All</button>
-          <button class="tab" role="tab" aria-selected="false" data-tab="favorites">Favorites</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="favorites">⭐ Favorites</button>
         </div>
       </div>
       <div id="history-groups"></div>
@@ -202,6 +228,21 @@
 
     <!-- ---------- SETTINGS ---------- -->
     <section class="view" data-view="settings">
+      <div class="card support-card">
+        <div class="support-top">
+          <span class="support-avatar" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8ZM10 15V9l5.2 3-5.2 3Z" fill="currentColor"/></svg></span>
+          <div>
+            <h3>Support the creator</h3>
+            <p class="muted">CodeZing &middot; Developer of LocalDrop</p>
+          </div>
+        </div>
+        <p class="support-desc">LocalDrop is free, private and built by one developer. If it helps you, subscribing to the YouTube channel is the best way to support new features and updates.</p>
+        <a class="btn btn-yt" id="btn-support-creator" href="https://www.youtube.com/@kudosc?sub_confirmation=1" target="_blank" rel="noopener noreferrer">
+          <svg class="i" viewBox="0 0 24 24"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8ZM10 15V9l5.2 3-5.2 3Z" fill="currentColor"/></svg>
+          Subscribe on YouTube
+        </a>
+      </div>
+
       <div class="card">
         <div class="card-header"><h3>General</h3></div>
         <div class="setting-row">
@@ -280,7 +321,8 @@
       </div>
 
       <div class="card">
-        <button class="btn btn-ghost full-width" data-nav="help">Help &amp; Limitations</button>
+        <button class="btn btn-outline full-width" data-nav="help">Help &amp; Limitations</button>
+        <button class="btn btn-outline full-width" data-nav="license">License &amp; Copyright</button>
       </div>
     </section>
 
@@ -307,6 +349,56 @@
         <p>LocalDrop never uses third-party STUN/TURN or relay servers, so connections are limited to devices that can reach each other directly — typically the same Wi-Fi network. It also means it won't work across two different networks (e.g. over mobile data).</p>
       </div>
     </section>
+
+    <!-- ---------- LICENSE ---------- -->
+    <section class="view" data-view="license">
+      <div class="card span-all">
+        <h2>LocalDrop Proprietary License</h2>
+        <p class="muted">Version 1.0 &middot; &copy; 2026 CodeZing. All rights reserved.</p>
+        <div class="license-meta">
+          <span class="license-pill accent">No resale</span>
+          <span class="license-pill">No redistribution</span>
+          <span class="license-pill">No modification</span>
+          <span class="license-pill">Personal use only</span>
+        </div>
+        <div class="license-body">
+          <h4>1. Ownership</h4>
+          <p>LocalDrop is owned by CodeZing (YouTuber). The software, including code, design, text, icons and branding, is licensed, not sold. All rights are reserved by the owner.</p>
+          <h4>2. Permitted use</h4>
+          <p>You may use the official version of LocalDrop, as provided by the owner, for your own personal, non-commercial purposes on your own devices.</p>
+          <h4>3. Not allowed without written permission</h4>
+          <ul>
+            <li>Selling, reselling, renting or sublicensing LocalDrop or any part of it.</li>
+            <li>Copying, hosting, mirroring or redistributing it on any website, app store or platform.</li>
+            <li>Modifying it, creating derivative works, or re-skinning it.</li>
+            <li>Rebranding it or presenting it as your own work.</li>
+            <li>Removing or hiding the copyright notice, license or creator credit.</li>
+            <li>Repackaging it (for example as an APK) for distribution or sale.</li>
+            <li>Using it to build or market a competing product.</li>
+          </ul>
+          <h4>4. Permission requests</h4>
+          <p>To ask for permission, contact the owner through the official YouTube channel. Permission is valid only when given in writing by the owner.</p>
+          <h4>5. Termination &amp; enforcement</h4>
+          <p>The license ends automatically if you break these terms. Unauthorized use may lead to takedown notices and legal action.</p>
+          <h4>6. Warranty &amp; liability</h4>
+          <p>The software is provided &ldquo;as is&rdquo;, without warranty of any kind. The owner is not liable for any damages arising from its use.</p>
+          <h4>7. Third-party components</h4>
+          <p>The QR code libraries in <span class="mono">assets/vendor</span> belong to their respective authors and stay under their own licenses.</p>
+        </div>
+        <a class="btn btn-yt" href="https://www.youtube.com/@kudosc" target="_blank" rel="noopener noreferrer" style="margin-top:18px">
+          <svg class="i" viewBox="0 0 24 24"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8ZM10 15V9l5.2 3-5.2 3Z" fill="currentColor"/></svg>
+          Contact CodeZing on YouTube
+        </a>
+      </div>
+    </section>
+
+    <!-- ---------- FOOTER (shown on every page) ---------- -->
+    <footer class="site-footer">
+      <span>&copy; 2026 <strong>CodeZing</strong>. All rights reserved.<span class="sep">&middot;</span>Proprietary software &mdash; no copying, resale or modification without written permission.</span>
+      <span>
+        <button class="link-btn" data-nav="license">License</button><span class="sep">&middot;</span><a href="https://www.youtube.com/@kudosc?sub_confirmation=1" target="_blank" rel="noopener noreferrer">YouTube</a>
+      </span>
+    </footer>
 
   </main>
 
@@ -348,30 +440,66 @@
 <template id="tpl-connect-device">
   <div class="modal-header">
     <h2>Connect Device</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
   </div>
+  <p class="connect-lead">Link your phone and laptop in about 10 seconds. Open LocalDrop on both, then pick a way:</p>
   <div class="tabs" role="tablist">
-    <button class="tab active" role="tab" data-pair-tab="show">Show code</button>
-    <button class="tab" role="tab" data-pair-tab="enter">Enter code</button>
-    <button class="tab" role="tab" data-pair-tab="demo">Demo</button>
+    <button class="tab active" role="tab" data-pair-tab="qr">📷 Scan QR</button>
+    <button class="tab" role="tab" data-pair-tab="manual">🔑 Code</button>
+    <button class="tab" role="tab" data-pair-tab="demo">🧪 Demo</button>
   </div>
-  <div class="pair-pane" data-pair-pane="show">
-    <p class="muted small">On the other device open LocalDrop, choose <b>Enter code</b> and type this code (or scan the QR). Expires in 5 minutes.</p>
-    <div class="pair-code" id="pair-code">...</div>
-    <div class="qr-wrap"><canvas id="qr-canvas" width="260" height="260"></canvas></div>
-    <div id="pair-host-status" class="pair-status pulse">Waiting for the other device...</div>
-    <button class="btn btn-outline full-width" id="btn-new-code">New code</button>
+
+  <div class="pair-pane" data-pair-pane="qr">
+    <div class="pair-subtabs">
+      <button class="chip active" data-qr-mode="host">Show my code</button>
+      <button class="chip" data-qr-mode="scan">Scan a code</button>
+    </div>
+    <div data-qr-host>
+      <p class="muted small">Have the other device scan this. It expires in <span id="qr-expiry">5:00</span>.</p>
+      <div class="qr-wrap scan-frame"><i></i><canvas id="qr-canvas" width="260" height="260"></canvas></div>
+      <div id="qr-host-waiting" class="pair-status pulse">Waiting for the other device to scan and respond…</div>
+      <div class="pair-row" data-qr-host-answer-scan hidden>
+        <p class="muted small">Now scan the reply code from the other device:</p>
+        <button class="btn btn-outline full-width" data-open-scan-for="answer">Scan Reply Code</button>
+        <p class="muted small">Or paste it:</p>
+        <textarea id="qr-answer-paste" class="mono" rows="3" placeholder="Paste reply code here"></textarea>
+        <button class="btn btn-primary full-width" id="btn-submit-answer-paste">Complete Pairing</button>
+      </div>
+    </div>
+    <div data-qr-scan hidden>
+      <video id="qr-video" playsinline muted></video>
+      <p class="muted small" id="qr-scan-hint">Point your camera at the other device's code.</p>
+      <button class="btn btn-outline full-width" id="btn-cancel-scan">Cancel</button>
+    </div>
   </div>
-  <div class="pair-pane" data-pair-pane="enter" hidden>
-    <label class="field-label" for="pair-code-input">Code from the other device</label>
-    <input id="pair-code-input" class="pair-code-input" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" placeholder="XXXX-XXXX">
-    <button class="btn btn-primary full-width" id="btn-join-code">Connect</button>
-    <video id="qr-video" playsinline muted hidden></video>
-    <button class="btn btn-outline full-width" id="btn-scan-code">Scan QR instead</button>
-    <div id="pair-join-status" class="muted small"></div>
+
+  <div class="pair-pane" data-pair-pane="manual" hidden>
+    <div class="pair-subtabs">
+      <button class="chip active" data-manual-mode="host">Show my code</button>
+      <button class="chip" data-manual-mode="join">Enter a code</button>
+    </div>
+    <div data-manual-host>
+      <p class="muted small">Send this code to the other device (message, email, read aloud). It expires in <span id="manual-expiry">5:00</span>.</p>
+      <textarea id="manual-offer-code" class="mono" rows="4" readonly></textarea>
+      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-outline" id="btn-copy-manual-offer">Copy</button><button class="btn btn-outline" id="btn-share-manual-offer">Share</button></div>
+      <p class="muted small">Then paste the reply code you get back:</p>
+      <textarea id="manual-answer-paste" class="mono" rows="4" placeholder="Paste reply code here"></textarea>
+      <button class="btn btn-primary full-width" id="btn-submit-manual-answer">Complete Pairing</button>
+    </div>
+    <div data-manual-join hidden>
+      <p class="muted small">Paste the code shown on the other device:</p>
+      <textarea id="manual-offer-paste" class="mono" rows="4" placeholder="Paste their code here"></textarea>
+      <div class="modal-actions" style="margin-top:8px"><button class="btn btn-secondary" id="btn-paste-clip-code">📋 Paste &amp; Connect</button><button class="btn btn-primary" id="btn-generate-manual-reply">Connect</button></div>
+      <div id="manual-reply-wrap" hidden>
+        <p class="muted small">Send this reply back to them:</p>
+        <textarea id="manual-reply-code" class="mono" rows="4" readonly></textarea>
+        <button class="btn btn-outline full-width" id="btn-copy-manual-reply">Copy Reply Code</button>
+      </div>
+    </div>
   </div>
+
   <div class="pair-pane" data-pair-pane="demo" hidden>
-    <p class="muted small">Adds a simulated device that only appears in other tabs of this browser. For testing only.</p>
+    <p class="muted small">Adds a simulated device that only appears in other tabs of this browser — for testing, not real cross-device sync.</p>
     <label class="field-label" for="demo-device-name">Simulated device name</label>
     <select id="demo-device-name">
       <option>Demo Phone</option>
@@ -396,7 +524,7 @@
 <template id="tpl-view-text">
   <div class="modal-header">
     <h2>Clipboard content</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
   </div>
   <p class="muted small" id="view-text-meta"></p>
   <pre class="text-viewer mono" id="view-text-body" tabindex="0"></pre>
@@ -409,7 +537,7 @@
 <template id="tpl-edit-text">
   <div class="modal-header">
     <h2>Edit clipboard entry</h2>
-    <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
+    <button class="icon-btn" data-close-modal aria-label="Close">✕</button>
   </div>
   <textarea id="edit-text-body" class="text-editor mono"></textarea>
   <div class="modal-actions">
@@ -443,7 +571,6 @@
 <script src="clipboard.js"></script>
 <script src="devices.js"></script>
 <script src="pairing.js"></script>
-<script src="signal.js"></script>
 <script src="history.js"></script>
 <script src="transfer.js"></script>
 <script src="app.js"></script>

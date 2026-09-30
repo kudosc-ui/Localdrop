@@ -1,4 +1,5 @@
 // app.js — view routing, rendering, and wiring every module together.
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 (() => {
   'use strict';
 
@@ -78,16 +79,18 @@
 
   // ================= Routing =================
 
+  const VIEW_TITLES = { help: 'Help & Limitations', license: 'License' };
+
   function navigate(view) {
     if (!$(`.view[data-view="${view}"]`)) return;
     currentView = view;
     $$('.view').forEach((v) => v.classList.toggle('active', v.dataset.view === view));
-    $$('.nav-item[data-nav]').forEach((btn) => {
+    $$('.nav-item[data-nav], .sidebar-help[data-nav]').forEach((btn) => {
       const match = btn.dataset.nav === view;
       if (match) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
     });
     const titleEl = $('#view-title');
-    if (titleEl) titleEl.textContent = view.charAt(0).toUpperCase() + view.slice(1);
+    if (titleEl) titleEl.textContent = VIEW_TITLES[view] || (view.charAt(0).toUpperCase() + view.slice(1));
     if (view === 'history') renderHistory();
     if (view === 'devices') renderDevices();
     if (view === 'files') renderFiles();
@@ -123,21 +126,12 @@
 
   // ================= Device icon helper =================
 
-  const ICON = {
-    phone: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>',
-    laptop: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="5" width="15" height="10.5" rx="1.5"/><path d="M2.5 19h19"/></svg>',
-    link: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>',
-    edit: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
-    power: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8"/><path d="M6.3 7.5a8 8 0 1 0 11.4 0"/></svg>',
-    trash: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13"/></svg>',
-    check: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
-  };
   function deviceEmoji(type) {
     const t = (type || '').toLowerCase();
-    if (t.includes('phone') || t.includes('android') || t.includes('iphone')) return ICON.phone;
-    if (t.includes('tablet') || t.includes('ipad')) return ICON.phone;
-    if (t.includes('mac') || t.includes('windows') || t.includes('linux') || t.includes('laptop') || t.includes('desktop')) return ICON.laptop;
-    return ICON.link;
+    if (t.includes('phone') || t.includes('android') || t.includes('iphone')) return '📱';
+    if (t.includes('tablet') || t.includes('ipad')) return '📱';
+    if (t.includes('mac') || t.includes('windows') || t.includes('linux') || t.includes('laptop') || t.includes('desktop')) return '💻';
+    return '🔗';
   }
 
   // ================= Home view =================
@@ -184,7 +178,7 @@
     return `
       <div class="clip-entry" data-entry-id="${entry.id}">
         ${body}
-        <div class="clip-entry-meta">${entry.favorite ? 'Starred · ' : ''}${sizeLine} · ${History.formatTime(entry.timestamp)}</div>
+        <div class="clip-entry-meta">${entry.favorite ? '⭐ ' : ''}${sizeLine} · ${History.formatTime(entry.timestamp)}</div>
         <div class="clip-entry-actions">
           <button class="btn btn-outline btn-sm" data-act="copy">Copy</button>
           <button class="btn btn-outline btn-sm" data-act="view">View</button>
@@ -408,7 +402,7 @@
       const star = document.createElement('button');
       star.className = 'icon-btn';
       star.setAttribute('aria-label', entry.favorite ? 'Remove favorite' : 'Add to favorites');
-      star.textContent = entry.favorite ? '★' : '☆';
+      star.textContent = entry.favorite ? '⭐' : '☆';
       star.style.marginLeft = 'auto';
       star.addEventListener('click', async () => { await History.toggleFavorite(id); renderHistory(); });
       el.querySelector('.clip-entry-actions').appendChild(star);
@@ -439,8 +433,8 @@
         </div>
         <span class="device-status-dot"></span>
         <div class="device-actions">
-          <button class="icon-btn" data-act="rename" aria-label="Rename ${escapeHtml(p.name)}">${ICON.edit}</button>
-          <button class="icon-btn" data-act="disconnect" aria-label="Disconnect ${escapeHtml(p.name)}">${ICON.power}</button>
+          <button class="icon-btn" data-act="rename" aria-label="Rename ${escapeHtml(p.name)}">✎</button>
+          <button class="icon-btn" data-act="disconnect" aria-label="Disconnect ${escapeHtml(p.name)}">⏻</button>
         </div>
       </li>`).join('');
     ul.querySelectorAll('[data-act="rename"]').forEach((btn) => btn.addEventListener('click', (e) => {
@@ -486,60 +480,221 @@
 
   function openConnectModal() {
     openModal('#tpl-connect-device', (panel) => {
-      const Sig = window.LocalDropSignal;
-      let session = null;
       const tabs = $$('.tabs [data-pair-tab]', panel);
-      const panes = { show: $('[data-pair-pane="show"]', panel), enter: $('[data-pair-pane="enter"]', panel), demo: $('[data-pair-pane="demo"]', panel) };
-      const statusEl = $('#pair-host-status', panel), joinStatus = $('#pair-join-status', panel);
-      let demoInit = false;
-
-      async function newCode() {
-        if (session) session.cancel();
-        $('#pair-code', panel).textContent = '...';
-        statusEl.textContent = 'Waiting for the other device...';
-        try {
-          session = await Sig.host();
-          $('#pair-code', panel).textContent = session.display;
-          await Pairing.renderQR($('#qr-canvas', panel), session.code);
-        } catch (err) { statusEl.textContent = 'Could not start: ' + err.message + '. Check your internet connection.'; }
-      }
-      async function join(raw) {
-        joinStatus.textContent = 'Connecting...';
-        try { await Sig.join(raw); joinStatus.textContent = 'Finishing connection...'; }
-        catch (err) { joinStatus.textContent = err.message; }
-      }
+      const panes = { qr: $('[data-pair-pane="qr"]', panel), manual: $('[data-pair-pane="manual"]', panel), demo: $('[data-pair-pane="demo"]', panel) };
+      const initOnce = { manual: false, demo: false }; // avoid generating a second RTCPeerConnection until the tab is actually opened
       tabs.forEach((t) => t.addEventListener('click', () => {
         tabs.forEach((x) => x.classList.toggle('active', x === t));
         Object.entries(panes).forEach(([k, el]) => { el.hidden = k !== t.dataset.pairTab; });
-        Pairing.stopScan(); $('#qr-video', panel).hidden = true;
-        if (t.dataset.pairTab === 'demo' && !demoInit) { demoInit = true; setupDemoPane(panel); }
+        Pairing.stopScan();
+        const key = t.dataset.pairTab;
+        if (key === 'manual' && !initOnce.manual) { initOnce.manual = true; setupManualPane(panel); }
+        if (key === 'demo' && !initOnce.demo) { initOnce.demo = true; setupDemoPane(panel); }
       }));
-      $('#btn-new-code', panel).addEventListener('click', newCode);
-      $('#btn-join-code', panel).addEventListener('click', () => join($('#pair-code-input', panel).value));
-      $('#pair-code-input', panel).addEventListener('input', (e) => {
-        const c = Sig.normalize(e.target.value).slice(0, 8);
-        e.target.value = c.length > 4 ? c.slice(0, 4) + '-' + c.slice(4) : c;
-        if (c.length === 8) join(c);
-      });
-      $('#btn-scan-code', panel).addEventListener('click', () => {
-        const v = $('#qr-video', panel); v.hidden = false;
-        Pairing.startScan(v, (d) => { Pairing.stopScan(); v.hidden = true; join(d); }, () => { v.hidden = true; joinStatus.textContent = 'Camera not available. Type the code instead.'; });
-      });
-      newCode();
+
+      setupQrPane(panel);
 
       const onConn = (e) => {
         Pairing.stopScan();
-        panel.innerHTML = `<div class="connected-ok"><div class="ok-ring">${ICON.check}</div><h2>Connected</h2><p class="muted">${escapeHtml(e.detail.name)} is linked. Anything you copy on one device now lands on the other.</p></div>`;
+        panel.innerHTML = `<div class="connected-ok"><div class="ok-ring">✓</div><h2>Connected</h2><p class="muted">${escapeHtml(e.detail.name)} is linked. Anything you copy on one device now lands on the other.</p></div>`;
         setTimeout(closeModal, 1800);
       };
       Devices.on('device-connected', onConn);
-      return () => { Devices.off('device-connected', onConn); Pairing.stopScan(); if (session) session.cancel(); };
+      return () => { Devices.off('device-connected', onConn); Pairing.stopScan(); if (pendingPairSession) pendingPairSession = null; };
     });
   }
 
   $('#btn-connect-device').addEventListener('click', openConnectModal);
   $('#btn-connect-device-home').addEventListener('click', openConnectModal);
   $('#btn-connect-device-empty')?.addEventListener('click', openConnectModal);
+
+  // ---- QR pane ----
+
+  function setupQrPane(panel) {
+    const hostBtn = $('[data-qr-mode="host"]', panel);
+    const scanBtn = $('[data-qr-mode="scan"]', panel);
+    const hostBox = $('[data-qr-host]', panel);
+    const scanBox = $('[data-qr-scan]', panel);
+
+    const showHost = async () => {
+      hostBtn.classList.add('active'); scanBtn.classList.remove('active');
+      hostBox.hidden = false; scanBox.hidden = true;
+      Pairing.stopScan();
+      await startQrHostFlow(panel);
+    };
+    const showScan = () => {
+      scanBtn.classList.add('active'); hostBtn.classList.remove('active');
+      hostBox.hidden = true; scanBox.hidden = false;
+      startQrScanFlow(panel, 'offer');
+    };
+    hostBtn.addEventListener('click', showHost);
+    scanBtn.addEventListener('click', showScan);
+    $('#btn-cancel-scan', panel).addEventListener('click', showHost);
+    showHost();
+  }
+
+  async function startQrHostFlow(panel) {
+    const canvas = $('#qr-canvas', panel);
+    const waitingEl = $('#qr-host-waiting', panel);
+    canvas.style.opacity = '0.35';
+    waitingEl.textContent = 'Generating your code…';
+    $('[data-qr-host-answer-scan]', panel).hidden = true;
+    const { sessionId, text } = await Devices.createOfferPackage();
+    pendingPairSession = sessionId;
+    await Pairing.renderQR(canvas, text);
+    canvas.style.opacity = '1';
+    startExpiry($('#qr-expiry', panel), 300);
+    waitingEl.textContent = 'Waiting for the other device to scan and respond…';
+    $('[data-qr-host-answer-scan]', panel).hidden = false;
+    $('[data-open-scan-for="answer"]', panel).onclick = () => startQrScanFlow(panel, 'answer');
+    $('#btn-submit-answer-paste', panel).onclick = async () => {
+      const val = $('#qr-answer-paste', panel).value.trim();
+      if (!val) return toast('Paste the reply code first');
+      await tryCompletePairing(val);
+    };
+  }
+
+  function startQrScanFlow(panel, kind) {
+    const video = $('#qr-video', panel);
+    const hint = $('#qr-scan-hint', panel);
+    hint.textContent = kind === 'offer' ? "Point your camera at the other device's code." : 'Scan the reply code shown on the other device.';
+    Pairing.startScan(video, async (decoded) => {
+      if (kind === 'offer') await handleScannedOffer(decoded, panel);
+      else await tryCompletePairing(decoded);
+    }, (err) => {
+      toast('Camera access denied or unavailable — try Manual Code instead');
+    });
+  }
+
+  async function handleScannedOffer(offerText, panel) {
+    const proceed = await requestPairingConfirmation(offerText);
+    if (!proceed) { toast('Pairing rejected'); Pairing.stopScan(); return; }
+    try {
+      const { text, remoteDeviceName } = await Devices.acceptOfferPackage(offerText);
+      Pairing.stopScan();
+      await Pairing.renderQR($('#qr-canvas', panel), text);
+      $('[data-qr-mode="host"]', panel).click();
+      $('#qr-host-waiting', panel).textContent = `Reply code ready. Show it back to ${remoteDeviceName}, or they can scan it.`;
+      $('[data-qr-host-answer-scan]', panel).hidden = true;
+      toast('Reply code generated — show it to the other device');
+    } catch (err) {
+      toast('Could not read that code: ' + err.message);
+    }
+  }
+
+  // ---- Manual pane ----
+
+  function setupManualPane(panel) {
+    const hostBtn = $('[data-manual-mode="host"]', panel);
+    const joinBtn = $('[data-manual-mode="join"]', panel);
+    const hostBox = $('[data-manual-host]', panel);
+    const joinBox = $('[data-manual-join]', panel);
+
+    const showHost = async () => {
+      hostBtn.classList.add('active'); joinBtn.classList.remove('active');
+      hostBox.hidden = false; joinBox.hidden = true;
+      const codeEl = $('#manual-offer-code', panel);
+      codeEl.value = 'Generating your code…';
+      const { sessionId, text } = await Devices.createOfferPackage();
+      pendingPairSession = sessionId;
+      codeEl.value = Pairing.toManualCode(text);
+      startExpiry($('#manual-expiry', panel), 300);
+    };
+    hostBtn.addEventListener('click', showHost);
+    joinBtn.addEventListener('click', () => {
+      joinBtn.classList.add('active'); hostBtn.classList.remove('active');
+      joinBox.hidden = false; hostBox.hidden = true;
+    });
+
+    $('#btn-copy-manual-offer', panel).addEventListener('click', async () => {
+      await Clip.writeText($('#manual-offer-code', panel).value);
+      toast('Code copied');
+    });
+    $('#btn-submit-manual-answer', panel).addEventListener('click', async () => {
+      const raw = $('#manual-answer-paste', panel).value.trim();
+      if (!raw) return toast('Paste the reply code first');
+      try { await tryCompletePairing(Pairing.fromManualCode(raw)); }
+      catch { toast('That code looks invalid'); }
+    });
+    $('#btn-paste-clip-code', panel).addEventListener('click', async () => {
+      const r = await Clip.readText();
+      if (!r.ok || !r.text) return toast('Could not read the clipboard — paste into the box instead');
+      $('#manual-offer-paste', panel).value = r.text;
+      $('#btn-generate-manual-reply', panel).click();
+    });
+    $('#btn-share-manual-offer', panel).addEventListener('click', async () => {
+      const code = $('#manual-offer-code', panel).value;
+      if (navigator.share) { try { await navigator.share({ title: 'LocalDrop pairing code', text: code }); return; } catch { return; } }
+      await Clip.writeText(code); toast('Code copied — send it to your other device');
+    });
+    $('#btn-generate-manual-reply', panel).addEventListener('click', async () => {
+      const raw = $('#manual-offer-paste', panel).value.trim();
+      if (!raw) return toast('Paste their code first');
+      let offerText;
+      try { offerText = Pairing.fromManualCode(raw); } catch { return toast('That code looks invalid'); }
+      if (JSON.parse(offerText).kind === 'answer') return tryCompletePairing(offerText); // smart: a reply code finishes pairing
+      const proceed = await requestPairingConfirmation(offerText);
+      if (!proceed) return toast('Pairing rejected');
+      try {
+        const { text } = await Devices.acceptOfferPackage(offerText);
+        $('#manual-reply-code', panel).value = Pairing.toManualCode(text);
+        $('#manual-reply-wrap', panel).hidden = false;
+        Clip.writeText($('#manual-reply-code', panel).value).then((r) => r.ok && toast('Reply code copied — send it back'));
+      } catch (err) {
+        toast('Could not use that code: ' + err.message);
+      }
+    });
+    $('#btn-copy-manual-reply', panel).addEventListener('click', async () => {
+      await Clip.writeText($('#manual-reply-code', panel).value);
+      toast('Reply code copied');
+    });
+
+    showHost();
+  }
+
+  async function tryCompletePairing(text) {
+    try {
+      await Devices.completeWithAnswer(text);
+      toast('Device paired');
+      closeModal();
+      renderDevices(); renderHomeDevices();
+    } catch (err) {
+      toast('Pairing failed: ' + err.message);
+    }
+  }
+
+  // Shows an inline Accept/Reject overlay *within the currently open connect
+  // modal* (rather than stacking a second modal, which would wipe out the
+  // QR/manual pairing state underneath it).
+  function requestPairingConfirmation(offerText) {
+    if (!Storage.getSettings().requirePairingConfirmation) return Promise.resolve(true);
+    let name = 'Unknown device';
+    try { name = JSON.parse(offerText).deviceName || name; } catch {}
+    return new Promise((resolve) => {
+      const tpl = $('#tpl-pairing-confirm');
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-overlay';
+      overlay.appendChild(tpl.content.cloneNode(true));
+      modalPanel.appendChild(overlay);
+      $('#pairing-confirm-name', overlay).textContent = name;
+      const finish = (val) => { overlay.remove(); resolve(val); };
+      $('#btn-accept-pair', overlay).addEventListener('click', () => finish(true));
+      $('#btn-reject-pair', overlay).addEventListener('click', () => finish(false));
+    });
+  }
+
+  function startExpiry(el, seconds) {
+    let remaining = seconds;
+    const tick = () => {
+      const m = Math.floor(remaining / 60);
+      const s = String(remaining % 60).padStart(2, '0');
+      if (el.isConnected) el.textContent = `${m}:${s}`;
+      remaining--;
+      if (remaining < 0) { clearInterval(iv); if (el.isConnected) el.textContent = 'expired'; }
+    };
+    tick();
+    const iv = setInterval(tick, 1000);
+  }
 
   // ---- Demo pane ----
 
@@ -571,7 +726,7 @@
         </div>
         <div class="device-actions">
           <button class="btn btn-outline btn-sm" data-act="download">Download</button>
-          <button class="icon-btn" data-act="delete" aria-label="Delete ${escapeHtml(f.name)}">${ICON.trash}</button>
+          <button class="icon-btn" data-act="delete" aria-label="Delete ${escapeHtml(f.name)}">🗑</button>
         </div>
       </li>`).join('');
     ul.querySelectorAll('[data-act="download"]').forEach((btn) => btn.addEventListener('click', async (e) => {
@@ -728,9 +883,16 @@
     renderSettings();
   }));
 
+  const THEME_COLORS = { dark: '#0a0c11', light: '#eceff6' };
   function applyTheme(theme) {
     if (theme === 'system') document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', theme);
+    // keep the browser / status-bar colour in sync with the chosen theme
+    $$('meta[name="theme-color"]').forEach((m) => {
+      const mq = m.getAttribute('media') || '';
+      const sys = mq.includes('light') ? THEME_COLORS.light : THEME_COLORS.dark;
+      m.setAttribute('content', THEME_COLORS[theme] || sys);
+    });
   }
 
   $('#btn-clear-history-settings').addEventListener('click', clearHistoryFlow);
@@ -778,11 +940,7 @@
     toast(copied ? `Copied from ${data.originDeviceName} — just paste` : Clip.hasPending() ? `From ${data.originDeviceName} — tap anywhere to copy it` : `Text received from ${data.originDeviceName}`);
     renderLatestClipboard(); renderHomeRecent();
     if (currentView === 'history') renderHistory();
-    if (document.hidden && !copied && 'Notification' in window && Notification.permission === 'granted') {
-      navigator.serviceWorker?.ready.then((r) => r.showNotification('Text from ' + data.originDeviceName, { body: 'Tap to copy it', tag: 'ld-clip', icon: 'icons/icon-192.png' })).catch(() => {});
-    }
   });
-  window.addEventListener('pointerdown', () => { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }, { once: true });
 
   // ================= Auto-delete-by-age sweep (Privacy setting) =================
 

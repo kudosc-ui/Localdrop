@@ -1,3 +1,4 @@
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 // pairing.js — QR code generation/scanning for the WebRTC handshake, plus the
 // "Manual Code" text-relay fallback for when a camera isn't available or two
 // devices aren't within scanning distance. Uses the vendored qrcode.js / jsQR.js

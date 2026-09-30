@@ -1,3 +1,4 @@
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 // transfer.js — chunked file transfer riding on devices.js's existing transports.
 // Chunks are base64-encoded inside JSON messages so the exact same code path
 // works whether the peer is a real WebRTC data channel or a Demo Mode tab.

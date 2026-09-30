@@ -1,3 +1,4 @@
+// LocalDrop (c) 2026 CodeZing. All rights reserved. Proprietary — see LICENSE.
 // clipboard.js — Clipboard API access with graceful, honest fallbacks.
 //
 // Browsers do NOT provide a "clipboard changed" event, and most browsers block
